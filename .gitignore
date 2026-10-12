@@ -1,0 +1,17 @@
+extract/
+backup/
+re/
+*.mdl
+*.vtf
+tools/ghidra_*/
+tools/jdk-*/
+tools/_dl/
+src/dmcombat/dm_paths.h
+*.bin
+bin/
+obj/
+modelsrc/
+build/
+src/dmcombat/dm_armvariants.h
+src/dmcombat/dm_weapons.h
+__pycache__/
