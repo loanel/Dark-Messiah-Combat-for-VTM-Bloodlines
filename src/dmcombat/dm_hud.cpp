@@ -3,7 +3,7 @@
 // client.dll (UP build): CBloodBar (vftable 0x10227f14) slot 98 (+0x188, 0x1004c9f0) = per-frame paint. It builds
 // CHUDSprite objects (ctor 0x10059250 thiscall(tex, x, y, w, h, texW, texH), 0x20 bytes) and draws them with
 // CHUDSprite::Draw 0x10059b70 thiscall(x, y, w, h, alpha) and DrawPart 0x1005c430 thiscall(x, y, w, h, int src[4], alpha).
-// Measured at 1920x1080 (MODLOG): icon bg Draw (bar+0x1ac) 1740,904 180x179; fill DrawPart (bar+0x1bc,
+// Example draw calls on a 16:9 screen, in pixels: icon bg Draw (bar+0x1ac) 1740,904 180x179; fill DrawPart (bar+0x1bc,
 // hud/new_ui/bloodbar/bloodbar) 1865,533 35x395 src {46,21,43,323} for blood 10/15 (src[3] = 43 + 421*blood/max);
 // bottom cap DrawPart (bar+0x1c0) 1865,899 35x28 src {46,21,22,42}; frame Draw (bar+0x1a4) 1740,47 180x1061.
 // The paint's draw calls are redirected to wrappers that remember their arguments; after the paint we draw the same

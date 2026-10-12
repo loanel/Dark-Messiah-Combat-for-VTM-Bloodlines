@@ -7,8 +7,8 @@ the player sees their own arm in first person, swinging the weapon with Dark Mes
 - timed parries, an adrenaline meter and finishing moves;
 - every player melee weapon, on the arm of the player's own character and outfit.
 
-This report covers the work from the first feasibility check (2026-10-09) to the finished weapon set (2026-10-11) and
-the follow-up session on a second PC (2026-10-12, steps 17–22), as Goal, Tools used and Result for each major step. Technical detail (addresses, file formats) is in `MODLOG.md`.
+This report covers the work from the first feasibility check to the finished weapon set, and a later follow-up
+session (steps 17–22), as Goal, Tools used and Result for each major step. Technical detail (addresses, file formats) is in `MODLOG.md`.
 
 **Ground rules kept throughout:**
 - No game files from either game are shipped. Everything taken from the games is read from the user's own installs
@@ -306,13 +306,13 @@ into one atlas freed a slot for every character.
 
 The user reviewed these galleries and confirmed all weapons and outfits.
 
-## 17. Moving to a second PC
+## 17. Resuming from the handoff archive
 
-**Goal.** Continue on another computer from the handoff zip, and leave the environment ready for future work.
+**Goal.** Continue in a fresh environment from the handoff archive, and leave it ready for future work.
 
 **Tools used.**
 - The handoff notes (`HANDOFF.md`) and the project memory carried over in the zip.
-- Checks of the new PC: game DLL versions (the plug-in's build check), where Dark Messiah is installed, Python and its
+- Checks of the environment: game DLL versions (the plug-in's build check), where Dark Messiah is installed, Python and its
   packages, Visual Studio Build Tools.
 - The full build from the notes: `build.bat`, `gen_sword_paths.py`, `weapon_prep.py`, `make_occult_blade.py`,
   `make_items.py`, `build_arm.sh`, `install.sh`, then `cmp` of every installed file.
@@ -404,7 +404,7 @@ table; a read-through of the install and build scripts; test runs from different
 | Ghidra 12.1.4 + Temurin JDK 21 | Downloaded (SHA-256 verified) | Reverse engineering vampire.dll, client.dll, engine.dll |
 | Python 3 + numpy, pillow, pefile, capstone | pip | All tools: mesh maths, images, PE parsing, disassembly |
 | Bloodlines SDK v2.20 (`SDKBinaries`) | User's install | `studiomdl.exe` (props), `studiomdl-sw.exe` + `studiovtmb49k.exe` (animated models), `VTFCmd.exe` (textures) |
-| Crowbar 0.74 / 0.65 (CroVtmb) | DMHL2 project / a VTMB build of Crowbar on this PC | Dark Messiah animation decompile (SMD); one early Bloodlines decompile, later replaced by `vtmb_mdl2smd.py` |
+| Crowbar 0.74 / 0.65 (CroVtmb) | DMHL2 project / a VTMB build of Crowbar | Dark Messiah animation decompile (SMD); one early Bloodlines decompile, later replaced by `vtmb_mdl2smd.py` |
 | Unofficial Patch Game Mod Loader | Part of UP v12.0 | Loads the `.vtm` plug-in |
 | vswhere | Part of the Visual Studio installer | `build.bat` finds Visual Studio (offline) |
 | New tools in `tools/` | Written in this project | Pack reader, MDL/VTX reader, texture reader/writer, arm retargeting, weapon placement, item patching, model builds, renderers, audio analysis |

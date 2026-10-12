@@ -1,7 +1,7 @@
 # How Dark Messiah Combat for VTM Bloodlines was built with an AI coding agent: prompting guide and retrospective
 
-Dark Messiah Combat for VTM Bloodlines was built by one player and Claude (Anthropic's model, running in Claude Code) over three days in October 2026,
-with a short follow-up session on a second PC on the fourth day (section 6).
+Dark Messiah Combat for VTM Bloodlines was built by one player and Claude (Anthropic's model, running in Claude Code) over three days, with a
+short follow-up session later (section 6).
 The player directed and tested in game. Claude did the reverse engineering, wrote the code and tools, and ran the
 builds.
 
@@ -18,7 +18,7 @@ Quotes are the player's own prompts, typos included, with long ones shortened.
 
 | | Main project (Dark Messiah Combat) | Earlier project (Dark Messiah sword in Half-Life 2, "DMHL2") |
 |---|---|---|
-| Dates | 2026-10-09 20:03 → 2026-10-11 12:46 (UTC) | 2026-10-06 16:34 → 2026-10-07 00:35 |
+| Duration | spread over three days (about 40 hours from first to last prompt, with nights and breaks) | one evening (about 8 hours) |
 | Claude Code conversations | 1 long conversation, plus a 2-minute setup session (installing the modding skills plugin) | 1 conversation |
 | Work blocks | 5. Two ended on the plan's usage limit ("I hit my usage limit…", "we have 5% left"), one on the end of the day | 1 evening |
 | Context compactions | 2 (the conversation was summarised and continued) | 1 |
@@ -41,7 +41,7 @@ Quotes are the player's own prompts, typos included, with long ones shortened.
 - "Output tokens" is roughly the amount Claude actually wrote: code, tools, documents and replies.
 - The numbers were counted from the session transcripts at the time of writing. They don't include this document's
   own creation.
-- The follow-up session of 2026-10-12 is counted separately in section 6.
+- The follow-up session is counted separately in section 6.
 
 **What came out of it:**
 - a native game plug-in of 12 C++ modules, and 26 Python tools;
@@ -228,7 +228,7 @@ The player's prompting was effective overall. A few things would have saved roun
   investigation to pin down. The later "Brujah male, heavy leather, katana, screenshot" form was much faster.
 - **Say when a choice is final.** "I think 6 looks best" → "Sorry, i picked the wrong option, i meant option 3" is
   harmless, but it caused a rebuild. "Option 3, final" removes the ambiguity.
-- **Mention environment events.** Windows update restarts, closing the game, and GeForce Now recording each looked
+- **Mention environment events.** System restarts, closing the game, and screen-recording software each looked
   like bugs for a moment. "I closed the game", or "Windows tried to restart", is a useful heads-up.
 - **Interrupting is fine and was used well** (12 times), mostly to add a detail just remembered. Combining the
   follow-up into one complete message after interrupting, as the player usually did, keeps the agent from acting on
@@ -267,13 +267,14 @@ The player's prompting was effective overall. A few things would have saved roun
 
 ---
 
-## 6. The follow-up session on a second PC (2026-10-12)
+## 6. The follow-up session
 
-The project moved to another computer through the handoff zip, and a new Claude Code session picked it up from there.
+The project was resumed later from the handoff archive (code, journal, notes and project memory), and a new Claude
+Code session picked it up from there.
 
 | | Follow-up session |
 |---|---|
-| Time | 2026-10-12 08:03 → about 11:00 (UTC), with long breaks for playing |
+| Duration | most of a day, with long breaks for playing |
 | Conversations | 1, no compactions |
 | Prompts by the player | 14 (one interrupted and rephrased) |
 | Model calls | ~170 (Claude Opus 5.5), measured before this documentation step |
@@ -289,7 +290,7 @@ requirements, a pre-release audit with two real installer bugs fixed, and these 
 1. **Resume from the handoff, not from memory.**
    > "Check these folders and md files to find a guide and orient yourself in the project."
 
-   The handoff notes, journal and copied project memory were enough to rebuild everything on the new PC without
+   The handoff notes, journal and copied project memory were enough to rebuild everything in the new environment without
    re-deriving anything. The short session length is mostly thanks to the written journal of the earlier sessions.
 2. **Remembered problems, described by symptom.**
    > "the flame texture was working incorrectly, it was place on the character instead of inside the torch"
@@ -323,7 +324,7 @@ requirements, a pre-release audit with two real installer bugs fixed, and these 
 ### What could have been better
 - **On Claude's side:** a first answer suggested a key without checking it was free (R is reload); the keybind lists
   should have been read first. The audit also showed that an installer bug (arm models gated on an obsolete file)
-  survived the earlier sessions, because the old file was always present on the first PC. A test install into a
+  survived the earlier sessions, because the old file was always present on the development machine. A test install into a
   clean copy of the game would have caught it.
 - **On the process:** a clean test installation (planned next) is the real check that the repository works for
   someone else.
