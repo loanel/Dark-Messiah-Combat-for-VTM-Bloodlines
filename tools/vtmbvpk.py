@@ -22,5 +22,8 @@ if __name__ == '__main__':
         if not pat.search(name): continue
         print(fn, name, s)
         if cmd == 'x':
-            dst = os.path.join(out, name); os.makedirs(os.path.dirname(dst), exist_ok=True)
+            root = os.path.realpath(out); dst = os.path.realpath(os.path.join(out, name))
+            if os.path.commonpath([root, dst]) != root:  # a name like ../x would write outside the output folder
+                print('  skipped (outside the output folder):', name); continue
+            os.makedirs(os.path.dirname(dst), exist_ok=True)
             with open(os.path.join(d, fn), 'rb') as f: f.seek(o); open(dst, 'wb').write(f.read(s))

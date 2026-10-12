@@ -249,6 +249,15 @@ def install(args):
     print("Settings: dmcombat.ini in the game folder. Uninstall: install.bat --uninstall")
 
 
+def ours(path):
+    """Files only Dark Messiah Combat creates (by name or folder): removed even when updated since the install
+    (for example a newer bin\\dmcombat.vtm copied in by hand)."""
+    name = os.path.basename(path).lower()
+    parent = os.path.basename(os.path.dirname(path)).lower()
+    return (name.startswith(("dmcombat", "v_dm_katana_arm", "dm_adrenaline"))
+            or parent in ("dm_katana", "dmcombat"))
+
+
 def uninstall(args):
     print("Dark Messiah Combat for VTM Bloodlines - uninstall")
     check_writable()
@@ -257,9 +266,18 @@ def uninstall(args):
     if not os.path.exists(MANIFEST):
         fail("no install record (%s) - nothing to uninstall from this folder." % MANIFEST)
     m = json.load(open(MANIFEST))
-    restored = removed = 0
+    restored = removed = kept = 0
+    game_root = os.path.realpath(GAME)
     for e in m["installed"]:
-        dst = os.path.join(GAME, e["path"])
+        dst = os.path.realpath(os.path.join(GAME, e["path"]))
+        if os.path.commonpath([game_root, dst]) != game_root or dst == game_root:
+            print("  skipped %s: outside the Bloodlines folder (install record edited?)" % e["path"])
+            kept += 1
+            continue
+        if not e["replaced"] and os.path.exists(dst) and not ours(dst) and sha256(dst) != e.get("sha256"):
+            print("  kept %s: not a Dark Messiah Combat file and changed since the install" % e["path"])
+            kept += 1
+            continue
         if e["replaced"]:
             kind = "items_orig" if e["path"].lower().endswith(".txt") and "items" in e["path"].lower() else "keys_orig"
             shutil.copyfile(os.path.join(ROOT, "backup", kind, os.path.basename(dst)), dst)
@@ -278,6 +296,8 @@ def uninstall(args):
     os.remove(MANIFEST)
     print("Removed %d files, restored %d original game files. dmcombat.ini and dmcombat.log stay in the game folder."
           % (removed, restored))
+    if kept:
+        print("%d listed files were left alone (see above)." % kept)
 
 
 def main():

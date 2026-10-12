@@ -152,6 +152,7 @@ first (or the installer once): they write two generated headers the plug-in incl
 | `dist/dmcombat.ini` | Default settings |
 | `docs/DMCombat_REPORT.md` | How the mod was built, step by step |
 | `docs/PROMPTING_GUIDE.md` | How it was built with an AI coding agent (Claude): prompts, statistics, lessons |
+| `docs/SECURITY_REVIEW.md` | Security review of the whole repository: no network access, what each powerful-looking part does |
 
 The two documents describe the whole development. They mention a development journal and analysis tools that aren't
 part of this repository.
