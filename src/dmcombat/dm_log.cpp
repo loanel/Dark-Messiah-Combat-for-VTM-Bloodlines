@@ -1,15 +1,29 @@
 #include <windows.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>
 #include "dm_log.h"
 
 static FILE *g_log;
 static CRITICAL_SECTION g_cs;
 
+const char *DMGamePath(const char *rel, char *out, int size)
+{
+	char exe[MAX_PATH];
+	DWORD n = GetModuleFileNameA(NULL, exe, sizeof(exe));
+	char *sl = n && n < sizeof(exe) ? strrchr(exe, '\\') : NULL;
+	if (sl) sl[1] = 0;
+	else exe[0] = 0;  // unknown: relative to the working directory
+	_snprintf(out, size, "%s%s", exe, rel);
+	out[size - 1] = 0;
+	return out;
+}
+
 void DMLogInit()
 {
 	InitializeCriticalSection(&g_cs);
-	g_log = fopen("dmcombat.log", "w");  // cwd = game root (Vampire.exe folder)
+	char path[MAX_PATH];
+	g_log = fopen(DMGamePath("dmcombat.log", path, sizeof(path)), "w");
 }
 
 void DMLog(const char *cat, const char *fmt, ...)

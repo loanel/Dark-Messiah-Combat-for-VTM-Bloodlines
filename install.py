@@ -1,8 +1,8 @@
-"""DMCombat installer: builds everything from the player's own games and installs it into the Unofficial Patch.
+"""Dark Messiah Combat for VTM Bloodlines installer: builds everything from the player's own games and installs it into the Unofficial Patch.
 
   install.bat                              install (or repair: run it again)
   install.bat --dark-messiah "<folder>"    when Dark Messiah isn't found automatically
-  install.bat --uninstall                  remove DMCombat and restore every file it replaced
+  install.bat --uninstall                  remove Dark Messiah Combat and restore every file it replaced
 
 Requirements (installed by the player): Bloodlines + Unofficial Patch v12.0, the Bloodlines SDK (in
 <Bloodlines>\\SDKBinaries), Dark Messiah of Might and Magic (single player), Python 3 with numpy and Pillow.
@@ -73,7 +73,7 @@ def check_bloodlines():
     for rel, stamp in BUILDS.items():
         p = os.path.join(GAME, rel)
         if not os.path.exists(p) or pe_timestamp(p) != stamp:
-            fail("%s is not the Unofficial Patch v12.0 build DMCombat was made for." % rel)
+            fail("%s is not the Unofficial Patch v12.0 build Dark Messiah Combat was made for." % rel)
     print("  Bloodlines + Unofficial Patch v12.0: %s" % GAME)
 
 
@@ -83,6 +83,22 @@ def check_sdk():
         fail("Bloodlines SDK not found in %s (missing %s). Install the Bloodlines SDK into the game folder."
              % (SDK, ", ".join(missing)))
     print("  Bloodlines SDK: %s" % SDK)
+
+
+def check_writable():
+    """Bloodlines under Program Files (Steam's default library) is write-protected without administrator rights."""
+    for d in (ROOT, os.path.join(UP, "vdata", "items"), os.path.join(GAME, "Bin", "loader"), GAME):
+        probe = os.path.join(d, "~dmcombat_write_test.tmp")
+        try:
+            with open(probe, "w") as f:
+                f.write("x")
+            os.remove(probe)
+        except OSError:
+            fail("can't write to %s.\n       Bloodlines is in a protected folder (for example under Program Files): "
+                 "right-click install.bat and choose \"Run as administrator\"." % d)
+    free = shutil.disk_usage(ROOT).free
+    if free < 400 * 1024 * 1024:
+        fail("only %d MB free on this drive; the build needs about 250 MB." % (free // (1024 * 1024)))
 
 
 def steam_libraries():
@@ -155,7 +171,7 @@ def sha256(path):
 
 # ---------------------------------------------------------------------------------------------------- install
 def install_files():
-    """(source in this folder, destination in the game). Everything DMCombat puts into the game."""
+    """(source in this folder, destination in the game). Everything Dark Messiah Combat puts into the game."""
     b = os.path.join(ROOT, "build")
     files = [(os.path.join(ROOT, "bin", "dmcombat.vtm"), os.path.join(GAME, "Bin", "loader", "dmcombat.vtm")),
              (os.path.join(b, "game", "dmcombat_dm.bin"), os.path.join(GAME, "dmcombat_dm.bin"))]
@@ -176,9 +192,10 @@ def install_files():
 
 
 def install(args):
-    print("DMCombat installer\n\nChecking requirements:")
+    print("Dark Messiah Combat for VTM Bloodlines - installer\n\nChecking requirements:")
     check_bloodlines()
     check_sdk()
+    check_writable()
     if game_running():
         fail("close the game first (Vampire.exe is running).")
     if not os.path.exists(os.path.join(ROOT, "bin", "dmcombat.vtm")):
@@ -229,7 +246,8 @@ def install(args):
 
 
 def uninstall(args):
-    print("DMCombat uninstall")
+    print("Dark Messiah Combat for VTM Bloodlines - uninstall")
+    check_writable()
     if game_running():
         fail("close the game first (Vampire.exe is running).")
     if not os.path.exists(MANIFEST):
@@ -258,8 +276,8 @@ def uninstall(args):
 
 def main():
     sys.stdout.reconfigure(line_buffering=True)  # our lines in order with the tools' output
-    ap = argparse.ArgumentParser(description="DMCombat installer (offline)")
-    ap.add_argument("--uninstall", action="store_true", help="remove DMCombat, restore the replaced game files")
+    ap = argparse.ArgumentParser(description="Dark Messiah Combat installer (offline)")
+    ap.add_argument("--uninstall", action="store_true", help="remove Dark Messiah Combat, restore the replaced game files")
     ap.add_argument("--dark-messiah", help="the Dark Messiah single player folder, if not found automatically")
     args = ap.parse_args()
     uninstall(args) if args.uninstall else install(args)

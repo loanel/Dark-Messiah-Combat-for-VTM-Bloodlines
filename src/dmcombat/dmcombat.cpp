@@ -18,16 +18,30 @@ void DMExitWatchdogStart();
 void DMEngineSoundGuard();
 void DMWarnConsole(const char *msg);
 
-// The mod folder the game runs (-game <folder>, default Vampire). Bin\loader plug-ins load for every folder.
+// <game>\<mod folder the game runs>: -game <folder> (quoted or not, any case), default Vampire. Absolute, so it doesn't
+// depend on the working directory. Bin\loader plug-ins load for every mod folder.
 static const char *ModDir()
 {
-	static char mod[MAX_PATH];
-	if (!mod[0]) {
-		strcpy(mod, "Vampire");
-		const char *g = strstr(GetCommandLineA(), "-game ");
-		if (g) sscanf(g + 6, " %259s", mod);
+	static char dir[MAX_PATH];
+	if (!dir[0]) {
+		char mod[MAX_PATH] = "Vampire", cmd[2048];
+		strncpy(cmd, GetCommandLineA(), sizeof(cmd) - 1);
+		cmd[sizeof(cmd) - 1] = 0;
+		_strlwr(cmd);
+		const char *g = strstr(cmd, "-game");
+		if (g && (g[5] == ' ' || g[5] == '\t')) {
+			const char *orig = GetCommandLineA() + (g - cmd) + 5;  // original case for the folder name
+			while (*orig == ' ' || *orig == '\t') orig++;
+			char end = ' ';
+			if (*orig == '"') { end = '"'; orig++; }
+			int n = 0;
+			while (orig[n] && orig[n] != end && orig[n] != '\t' && n < (int)sizeof(mod) - 1) n++;
+			if (n) { memcpy(mod, orig, n); mod[n] = 0; }
+		}
+		DMGamePath(mod, dir, sizeof(dir));
+		DMLog("init", "mod folder %s", dir);
 	}
-	return mod;
+	return dir;
 }
 
 // Dark Messiah data (dmcombat_dm.bin, generated on the player's PC) and DMCombat's models in the running mod folder

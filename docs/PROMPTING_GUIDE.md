@@ -1,6 +1,6 @@
-# How DMCombat was built with an AI coding agent: prompting guide and retrospective
+# How Dark Messiah Combat for VTM Bloodlines was built with an AI coding agent: prompting guide and retrospective
 
-DMCombat was built by one player and Claude (Anthropic's model, running in Claude Code) over three days in October 2026,
+Dark Messiah Combat for VTM Bloodlines was built by one player and Claude (Anthropic's model, running in Claude Code) over three days in October 2026,
 with a short follow-up session on a second PC on the fourth day (section 6).
 The player directed and tested in game. Claude did the reverse engineering, wrote the code and tools, and ran the
 builds.
@@ -16,7 +16,7 @@ Quotes are the player's own prompts, typos included, with long ones shortened.
 
 ## 1. Usage statistics
 
-| | Main project (DMCombat) | Earlier project (Dark Messiah sword in Half-Life 2, "DMHL2") |
+| | Main project (Dark Messiah Combat) | Earlier project (Dark Messiah sword in Half-Life 2, "DMHL2") |
 |---|---|---|
 | Dates | 2026-10-09 20:03 → 2026-10-11 12:46 (UTC) | 2026-10-06 16:34 → 2026-10-07 00:35 |
 | Claude Code conversations | 1 long conversation, plus a 2-minute setup session (installing the modding skills plugin) | 1 conversation |
@@ -331,11 +331,11 @@ requirements, a pre-release audit with two real installer bugs fixed, and these 
 ---
 
 ## 7. Glossary
-- **Plug-in (`.vtm`):** a DLL that the Unofficial Patch's Game Mod Loader loads into the game. DMCombat's code lives
+- **Plug-in (`.vtm`):** a DLL that the Unofficial Patch's Game Mod Loader loads into the game. Dark Messiah Combat's code lives
   here.
 - **Server / client:** Bloodlines runs the game logic (hits, damage, enemies) and the presentation (screen, sounds,
-  HUD) as two halves in the same process. DMCombat hooks both.
-- **Viewmodel:** the first-person model of what you hold. DMCombat replaces it with an animated arm driven by Dark
+  HUD) as two halves in the same process. Dark Messiah Combat hooks both.
+- **Viewmodel:** the first-person model of what you hold. Dark Messiah Combat replaces it with an animated arm driven by Dark
   Messiah's animations.
 - **Reverse engineering:** reading the game's compiled code (with Ghidra) to find the functions to hook.
 - **Context compaction:** when a conversation gets too long, Claude Code summarises it and continues. Details can get

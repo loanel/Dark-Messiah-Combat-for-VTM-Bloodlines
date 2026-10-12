@@ -66,11 +66,18 @@ static float g_trailLife = 0.2f;   // dmcombat.ini trail_life (seconds)
 static int g_trailAlpha = 170;     // dmcombat.ini trail_alpha (0-255)
 static float g_torchFlame = 4;     // dmcombat.ini torch_flame: flame this many units below the torch's head end
 
+static const char *IniPath()  // <game>\dmcombat.ini (absolute: the working directory may be anything)
+{
+	static char path[MAX_PATH];
+	if (!path[0]) DMGamePath("dmcombat.ini", path, sizeof(path));
+	return path;
+}
+
 static float IniF(const char *key, float def)
 {
 	char buf[64], d[32];
 	sprintf(d, "%g", def);
-	GetPrivateProfileStringA("viewmodel", key, d, buf, sizeof(buf), ".\\dmcombat.ini");
+	GetPrivateProfileStringA("viewmodel", key, d, buf, sizeof(buf), IniPath());
 	return (float)atof(buf);
 }
 
@@ -80,7 +87,7 @@ static void ReloadSettings()
 	if (now - g_iniCheck < 500) return;
 	g_iniCheck = now;
 	WIN32_FILE_ATTRIBUTE_DATA fa;
-	if (!GetFileAttributesExA("dmcombat.ini", GetFileExInfoStandard, &fa)) return;
+	if (!GetFileAttributesExA(IniPath(), GetFileExInfoStandard, &fa)) return;
 	if (CompareFileTime(&fa.ftLastWriteTime, &g_iniTime) == 0) return;
 	g_iniTime = fa.ftLastWriteTime;
 	S.enabled = (int)IniF("enabled", 1);

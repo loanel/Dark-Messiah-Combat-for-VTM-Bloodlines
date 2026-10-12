@@ -1,7 +1,7 @@
-# DMCombat: how the mod was built
+# Dark Messiah Combat for VTM Bloodlines: how the mod was built
 
-DMCombat brings Dark Messiah of Might and Magic's first-person melee combat to Vampire: The Masquerade - Bloodlines
-(Unofficial Patch v12.0). In Bloodlines, melee weapons are fought in third person with dice-rolled hits. With DMCombat
+Dark Messiah Combat for VTM Bloodlines brings Dark Messiah of Might and Magic's first-person melee combat to Vampire: The Masquerade - Bloodlines
+(Unofficial Patch v12.0). In Bloodlines, melee weapons are fought in third person with dice-rolled hits. With Dark Messiah Combat
 the player sees their own arm in first person, swinging the weapon with Dark Messiah's animations. The mod adds:
 - a fast-attack chain and directional power attacks;
 - timed parries, an adrenaline meter and finishing moves;
@@ -332,7 +332,7 @@ paths for Python, `subst W:` from PowerShell, forward slashes for the Ghidra run
 - A vtable comparison of the torch against plain melee weapons, to see what the torch does differently.
 
 **Result.**
-- The game attaches the flame to the torch's *world* model, the one the character's body holds. DMCombat's first-person
+- The game attaches the flame to the torch's *world* model, the one the character's body holds. Dark Messiah Combat's first-person
   view never shows that body, so the flame stayed at its hand below the camera.
 - The plug-in now hooks the particle's per-frame follow update and moves the flame onto the head of the drawn torch.
   The drawn arm uses a different field of view from the world, so the point is corrected for that and lands exactly
@@ -359,7 +359,7 @@ discipline key, without taking a key from guns and without overriding a player's
 ## 20. First person only with melee weapons
 
 **Goal.** The camera toggle still switched to third person with a melee weapon, where Bloodlines' own animations
-don't fit DMCombat's weapons. Guns already lock first person.
+don't fit Dark Messiah Combat's weapons. Guns already lock first person.
 
 **Tools used.** A comparison of the camera classes in the item files with the ones the game's code knows.
 
@@ -373,7 +373,7 @@ knows; it only stopped the automatic switch. The melee items now use the game's 
 **Tools used.** Decompiling the item parser and the attack calculation, and the hit log.
 
 **Result.** Bloodlines never restricts equipping. The requirement lowers the attack value: Base Lethality + (melee pool
-− requirement). DMCombat's hits go through the game's dice and damage code, so this still applies. The user chose to
+− requirement). Dark Messiah Combat's hits go through the game's dice and damage code, so this still applies. The user chose to
 keep the vanilla behaviour.
 
 ## 22. Pre-release audit

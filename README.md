@@ -1,7 +1,7 @@
-# DMCombat
+# Dark Messiah Combat for VTM Bloodlines
 
 Dark Messiah of Might and Magic's first-person melee combat for **Vampire: The Masquerade - Bloodlines** with the
-**Unofficial Patch v12.0**.
+**[Unofficial Patch v12.0](https://www.moddb.com/mods/vtmb-unofficial-patch)**.
 
 - You see your own character's arm in first person, swinging the weapon with Dark Messiah's animations.
 - Fast-attack chains and directional power attacks, timed parries on the right mouse button, an adrenaline meter and
@@ -16,7 +16,7 @@ games, on your PC.
 
 Install these first:
 
-1. **Vampire: The Masquerade - Bloodlines** (Steam or GOG) with the **Unofficial Patch v12.0**. DMCombat checks the
+1. **Vampire: The Masquerade - Bloodlines** (Steam or GOG) with the **[Unofficial Patch v12.0](https://www.moddb.com/mods/vtmb-unofficial-patch)**. Dark Messiah Combat checks the
    exact game builds and stays off with any other version.
 2. **The Bloodlines SDK**, installed into the game folder (its tools end up in `<Bloodlines>\SDKBinaries`). The
    installer uses its model compiler and texture tool.
@@ -31,8 +31,10 @@ game installs and writes into this folder and your Bloodlines folder.
 ## Install
 
 1. Download the latest release and unpack it **into your Bloodlines folder**, so you get
-   `<Bloodlines>\DMCombat\install.bat`. (The release includes the ready-built plug-in, `bin\dmcombat.vtm`.)
-2. Close the game and run `install.bat`.
+   `<Bloodlines>\Dark Messiah Combat\install.bat`. (The release includes the ready-built plug-in, `bin\dmcombat.vtm`.)
+2. Close the game and run `install.bat`. If Bloodlines is in a protected folder (Steam's default under
+   `C:\Program Files (x86)`), right-click `install.bat` and choose **Run as administrator**. About 250 MB of free space
+   is needed for the build.
 
 It checks everything above, finds Dark Messiah through Steam or GOG (or asks; or run
 `install.bat --dark-messiah "<folder>"`), builds the models, textures and data (about a minute) and installs them into
@@ -49,7 +51,8 @@ Start Bloodlines the way the Unofficial Patch is always started: its desktop sho
 (Properties > Launch options). Started without the patch, the game runs without DMCombat.
 
 - **Left mouse:** attack. Tap for the fast chain; hold for a power attack, aimed by the movement key (W/A/S/D) held when
-  it starts. With the adrenaline meter full, a released power attack becomes a finishing move.
+  it starts. With the adrenaline meter full, a released power attack becomes a finishing move. The direction is read
+  from the physical W/A/S/D keys, whatever your movement keybinds are.
 - **Right mouse:** block / parry (a block just before the hit is a perfect parry). While holding a power attack, it
   re-aims the attack with the movement key held at that moment.
 - **Q:** cast the selected discipline. The installer moves "Cast Discipline Power" from the right mouse button to Q;
@@ -61,7 +64,7 @@ Start Bloodlines the way the Unofficial Patch is always started: its desktop sho
 
 The release includes `bin\dmcombat.vtm`. To build it from `src\dmcombat`: Visual Studio 2017 or newer (or its Build
 Tools) with "Desktop development with C++", then run `build.bat` from a path without spaces (for example a drive letter
-mapped with `subst W: "<Bloodlines>\DMCombat"`). Run `python tools\weapon_prep.py` and `python tools\build_arms.py`
+mapped with `subst W: "<Bloodlines>\Dark Messiah Combat"`). Run `python tools\weapon_prep.py` and `python tools\build_arms.py`
 first (or the installer once): they write two generated headers the plug-in includes.
 
 ## Repository
@@ -81,7 +84,7 @@ part of this repository.
 
 ## Credits and disclaimer
 
-- Wesp5 and contributors: the Unofficial Patch and its Game Mod Loader.
+- Wesp5 and contributors: the [Unofficial Patch](https://www.moddb.com/mods/vtmb-unofficial-patch) and its Game Mod Loader.
 - The Bloodlines SDK authors.
 - Built by loanel together with Claude (Anthropic) in Claude Code; see `docs/PROMPTING_GUIDE.md`.
 

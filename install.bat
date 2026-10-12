@@ -1,7 +1,7 @@
 @echo off
-rem DMCombat installer. Checks for Python, numpy and Pillow, then runs install.py (offline, nothing is downloaded).
+rem Dark Messiah Combat for VTM Bloodlines installer. Checks for Python, numpy and Pillow, then runs install.py (offline, nothing is downloaded).
 rem   install.bat                 install or repair
-rem   install.bat --uninstall     remove DMCombat
+rem   install.bat --uninstall     remove Dark Messiah Combat
 setlocal
 cd /d "%~dp0"
 set "PY="
