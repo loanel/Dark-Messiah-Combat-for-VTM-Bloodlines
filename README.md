@@ -81,6 +81,8 @@ Start Bloodlines the way the Unofficial Patch is always started: its desktop sho
 - **Q:** cast the selected discipline. The installer moves "Cast Discipline Power" from the right mouse button to Q;
   change it in Options > Keyboard like any other key.
 - Melee weapons stay in first person.
+- **Getting hit:** enemy hits still knock you back, but with a melee weapon out you keep control: no hit stun, you
+  can move, swing and block right away. `hit_stun=1` in `dmcombat.ini` brings back Bloodlines' own stun.
 - Settings: `dmcombat.ini` in the game folder, reloaded while the game runs. Log: `dmcombat.log`.
 - If the game process stays open after you quit (it happens on some systems), set `exit_watchdog=1` in `dmcombat.ini`:
   the process then ends itself 5 seconds after its window closed.

@@ -467,6 +467,11 @@ static void __fastcall KatanaThink(void *weapon, void *)
 }
 
 // Called every client frame (dm_viewmodel.cpp): runs the katana logic while the game's update is locked out.
+// dmcombat.ini recoil_hits (default 0): running the server's hit code from the client frame is suspected of two
+// crashes (engine sound system, client effects; both shortly after hits landed this way), so it is off - during the
+// lockout swings don't hit. The [gap] line is still logged.
+int g_dmRecoilHits = 0;
+
 void DMServerFallbackTick()
 {
 	static DWORD lastLog;
@@ -475,8 +480,10 @@ void DMServerFallbackTick()
 	if (now - g_lastThink < FALLBACK_AFTER_MS) return;
 	if (now - lastLog > 1000) {
 		lastLog = now;
-		DMLog("gap", "game paused the katana update (%lu ms) - running the DM hits from the client frame", now - g_lastThink);
+		DMLog("gap", "game paused the katana update (%lu ms) - %s", now - g_lastThink,
+			g_dmRecoilHits ? "running the DM hits from the client frame" : "no hits until it resumes (recoil_hits=0)");
 	}
+	if (!g_dmRecoilHits) return;
 	if (IsBadReadPtr(g_lastWeapon, 0x10) || MeleeIndex(g_lastWeapon) < 0) return;
 	KatanaLogic(g_lastWeapon);
 }
@@ -678,6 +685,66 @@ static void ApplyArmModel()
 	}
 }
 
+// Hit stun: when an enemy hits the player, Bloodlines plays a knockback/flinch on the player's body and, while that
+// animation runs, CBasePlayer::IsBusy (vtable +0x670, 0x10161200) returns true: the weapon code (0x10174ce0) skips the
+// weapon's frame and the movement code (0x10181780, 0x10350830) slows/locks the player. A hit that we parry also sets
+// m_flNextAttack (+0x1564) 0.6 s ahead (vtable +0x4fc, 0x10160d00, thiscall 3 args, plays the blocked reaction). With a DM melee weapon out we keep the knockback
+// push, view punch and animation but report "not busy" for the hit reactions, and clear that next-attack delay.
+// Block (0x52, 0x1152..0x1156) and feeding (0x1065..0x1067) stay busy.
+static const DWORD VT_PLAYER = 0x1046fbb4, VT_HL2PLAYER = 0x104a271c;
+static const int SLOT_ISBUSY = 0x670 / 4, SLOT_HITDELAY = 0x4fc / 4;
+static const int PLAYER_ACTIVITY = 0xff0, PLAYER_NEXTATTACK = 0x1564;
+static const DWORD GPGLOBALS = 0x1070b228;  // gpGlobals; curtime at +0xc
+typedef bool(__thiscall *IsBusy_t)(void *player);
+typedef bool(__thiscall *HitDelay_t)(void *player, int a, int b, int c);
+static IsBusy_t g_origIsBusy[2];
+static HitDelay_t g_origHitDelay[2];
+int g_dmHitStun = 0;  // dmcombat.ini hit_stun: 1 = Bloodlines' own stun after being hit
+
+static bool HitReaction(int act)
+{
+	if (act == 0x49 || act == 0x4a || act == 0xf1b) return true;    // small/big flinch, hit stepback
+	if (act >= 0x66 && act <= 0x6d) return true;                    // flinches
+	if (act >= 0x73 && act <= 0x93) return true;                    // hits and knockbacks (incl. the flying ones)
+	return act >= 0x7f0 && act <= 0xd4e && (act - 0x7f0) % 0x70 <= 0x1e;  // per-weapon knockbacks (0x7f0, 0x860 ... 0xd30)
+}
+
+static float CurTime() { return *(float *)(*(BYTE **)(g_base + (GPGLOBALS - PREF_BASE)) + 0xc); }
+
+static bool IsBusyCommon(int k, void *player)
+{
+	bool busy = g_origIsBusy[k](player);
+	if (!busy || g_dmHitStun || !g_dmSword.active) return busy;
+	int act = *(int *)((BYTE *)player + PLAYER_ACTIVITY);
+	if (!HitReaction(act)) return busy;
+	static int lastAct = -1;
+	static float lastLog;
+	float now = CurTime();
+	if (act != lastAct || now - lastLog > 2) {
+		DMLog("stun", "hit reaction %#x: player stays in control", act);
+		lastAct = act;
+		lastLog = now;
+	}
+	return false;
+}
+static bool __fastcall IsBusyHook0(void *p, void *) { return IsBusyCommon(0, p); }
+static bool __fastcall IsBusyHook1(void *p, void *) { return IsBusyCommon(1, p); }
+
+static bool HitDelayCommon(int k, void *player, int a, int b, int c)
+{
+	bool r = g_origHitDelay[k](player, a, b, c);
+	if (g_dmHitStun || !g_dmSword.active) return r;
+	float *next = (float *)((BYTE *)player + PLAYER_NEXTATTACK);
+	float now = CurTime();
+	if (*next > now) {
+		DMLog("stun", "cleared the %.2f s attack delay after a hit", *next - now);
+		*next = now;
+	}
+	return r;
+}
+static bool __fastcall HitDelayHook0(void *p, void *, int a, int b, int c) { return HitDelayCommon(0, p, a, b, c); }
+static bool __fastcall HitDelayHook1(void *p, void *, int a, int b, int c) { return HitDelayCommon(1, p, a, b, c); }
+
 void DMServerInstall(HMODULE server)
 {
 	g_base = (DWORD)server;
@@ -699,6 +766,16 @@ void DMServerInstall(HMODULE server)
 	g_origFistsPrecache = (Precache_t)DMHookVSlot(server, VT_FISTS, SLOT_PRECACHE, (void *)&FistsPrecache);
 	DMLog("arm", "all-melee precache on the fists: unarmed %s, fists %s", g_origUnarmedPrecache ? "hooked" : "NOT hooked",
 		g_origFistsPrecache ? "hooked" : "NOT hooked");
+
+	// hit stun (CHL2_Player is the player's class; CBasePlayer's table for completeness)
+	const DWORD playerVt[2] = {VT_HL2PLAYER, VT_PLAYER};
+	IsBusy_t busyHooks[2] = {(IsBusy_t)&IsBusyHook0, (IsBusy_t)&IsBusyHook1};
+	HitDelay_t delayHooks[2] = {(HitDelay_t)&HitDelayHook0, (HitDelay_t)&HitDelayHook1};
+	for (int k = 0; k < 2; k++) {
+		g_origIsBusy[k] = (IsBusy_t)DMHookVSlot(server, playerVt[k], SLOT_ISBUSY, (void *)busyHooks[k]);
+		g_origHitDelay[k] = (HitDelay_t)DMHookVSlot(server, playerVt[k], SLOT_HITDELAY, (void *)delayHooks[k]);
+		if (!g_origIsBusy[k] || !g_origHitDelay[k]) DMLog("stun", "player vtable %08lx not hooked - Bloodlines hit stun stays", playerVt[k]);
+	}
 
 	HookThunk(DICEROLLS_THUNK, DICEROLLS_FN, (void *)&DiceRollsHook, (void **)&g_origDiceRolls, "melee dice rolls");
 

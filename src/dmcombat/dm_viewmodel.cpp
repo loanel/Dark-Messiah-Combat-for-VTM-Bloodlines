@@ -33,6 +33,8 @@ extern float g_dmReticleSize;
 extern float g_dmDamageScale;
 extern int g_dmSideKnock, g_dmSideKnockFlip;
 extern int g_dmExitWatchdog;
+extern int g_dmRecoilHits;
+extern int g_dmHitStun;
 
 static const DWORD PREF_BASE = 0x10000000;
 static const DWORD CALCVMVIEW = 0x10190ba0;      // CViewRender::CalcViewModelView
@@ -132,6 +134,8 @@ static void ReloadSettings()
 	g_dmSideKnock = (int)IniF("side_knock", 1);
 	g_dmSideKnockFlip = (int)IniF("side_knock_flip", 0);
 	g_dmExitWatchdog = (int)IniF("exit_watchdog", 0);
+	g_dmRecoilHits = (int)IniF("recoil_hits", 0);
+	g_dmHitStun = (int)IniF("hit_stun", 0);
 	DMLog("ini", "reloaded: enabled %d grip %.1f flip %.0f roll %.1f offset %.1f %.1f %.1f pitch %.1f speed %.2f charge %.2f",
 		S.enabled, S.grip, S.flip, S.roll, S.offset[0], S.offset[1], S.offset[2], S.pitch, S.speed, S.chargeTime);
 }
