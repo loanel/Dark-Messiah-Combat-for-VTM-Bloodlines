@@ -131,7 +131,7 @@ static void ReloadSettings()
 	g_dmDamageScale = IniF("damage_scale", 1);
 	g_dmSideKnock = (int)IniF("side_knock", 1);
 	g_dmSideKnockFlip = (int)IniF("side_knock_flip", 0);
-	g_dmExitWatchdog = (int)IniF("exit_watchdog", 1);
+	g_dmExitWatchdog = (int)IniF("exit_watchdog", 0);
 	DMLog("ini", "reloaded: enabled %d grip %.1f flip %.0f roll %.1f offset %.1f %.1f %.1f pitch %.1f speed %.2f charge %.2f",
 		S.enabled, S.grip, S.flip, S.roll, S.offset[0], S.offset[1], S.offset[2], S.pitch, S.speed, S.chargeTime);
 }

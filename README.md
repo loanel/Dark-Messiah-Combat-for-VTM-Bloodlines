@@ -80,6 +80,8 @@ Start Bloodlines the way the Unofficial Patch is always started: its desktop sho
   change it in Options > Keyboard like any other key.
 - Melee weapons stay in first person.
 - Settings: `dmcombat.ini` in the game folder, reloaded while the game runs. Log: `dmcombat.log`.
+- If the game process stays open after you quit (it happens on some systems), set `exit_watchdog=1` in `dmcombat.ini`:
+  the process then ends itself 5 seconds after its window closed.
 
 ### Damage
 

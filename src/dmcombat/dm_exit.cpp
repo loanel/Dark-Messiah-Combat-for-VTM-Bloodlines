@@ -1,11 +1,11 @@
 // Exit watchdog: on some systems the game stays alive after quitting - no window, idle, main thread waiting inside
 // the engine / graphics driver shutdown (no DMCombat code on any thread). Once the game window has
 // existed and then been gone for EXIT_GRACE_MS (saves and config are written before the window goes away), the
-// process ends itself. dmcombat.ini exit_watchdog=0 turns it off.
+// process ends itself. Off by default; dmcombat.ini exit_watchdog=1 turns it on.
 #include <windows.h>
 #include "dm_log.h"
 
-int g_dmExitWatchdog = 1;
+int g_dmExitWatchdog = 0;  // off by default; dmcombat.ini exit_watchdog=1 turns it on
 static const DWORD EXIT_GRACE_MS = 5000;
 
 static BOOL CALLBACK FindOwnWindow(HWND hwnd, LPARAM found)
