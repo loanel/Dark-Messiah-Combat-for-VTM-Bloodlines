@@ -1,5 +1,5 @@
 """The occult blade's own blade texture: the game's kantanablade_clr_wield2 (the katana's steel tinted purple) with
-more contrast and colour, so it reads as a different sword from the katana (user request 2026-10-11, option
+more contrast and colour, so it reads as a different sword from the katana (chosen option
 "contrast 2.0, colour 2.0"). Read from the user's Bloodlines packs at build time -> build/game/materials/models/
 weapons/dm_katana/dm_occult_blade (tools/tga2ttx.py). weapon_prep.MATERIALS maps the blade to it.
 

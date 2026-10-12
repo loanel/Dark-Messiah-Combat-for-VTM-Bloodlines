@@ -38,10 +38,10 @@ ap.add_argument("donor")
 ap.add_argument("--grip", type=float, default=-13.0)
 ap.add_argument("--grip-anim", default="anm_sword_noshield_idle")
 ap.add_argument("--thumb-along", type=float, default=0.3, help="character thumbs: swing towards the guard, 0 = DM grip, 1 = fully along the handle")
-ap.add_argument("--thumb-wrap", type=float, default=0.0, help="character thumbs: degrees around the handle axis (user pick 2026-10-10: along 0.3, wrap 0)")
-ap.add_argument("--own-hands", action="store_true", help="character arms: keep each outfit's own hand (default: every outfit gets the base outfit armor_0's hand, only the sleeve changes - user request 2026-10-11)")
+ap.add_argument("--thumb-wrap", type=float, default=0.0, help="character thumbs: degrees around the handle axis (chosen in game: along 0.3, wrap 0)")
+ap.add_argument("--own-hands", action="store_true", help="character arms: keep each outfit's own hand (default: every outfit gets the base outfit armor_0's hand, only the sleeve changes)")
 ap.add_argument("--hand-extend", type=float, default=2.0, help="character arms: the base hand reaches this far (units) up the forearm under the outfit's sleeve, so short sleeves leave no gap")
-ap.add_argument("--wrist-to-hand", type=float, default=0.5, help="character arms: share of the Bloodlines wrist helper bone's weight moved to the hand, so sleeve ends and glove cuffs bend with DM's cocked grip instead of sticking out over the hand (brujah heavy leather, 2026-10-11)")
+ap.add_argument("--wrist-to-hand", type=float, default=0.5, help="character arms: share of the Bloodlines wrist helper bone's weight moved to the hand, so sleeve ends and glove cuffs bend with DM's cocked grip instead of sticking out over the hand (brujah heavy leather)")
 ap.add_argument("--weapon-smd", help="use this katana-space weapon mesh (tools/weapon_prep.py) instead of the katana")
 ap.add_argument("--character", help="e.g. toreador_male: its outfits as variants 1-4 (default: base model, DM arm only)")
 args = ap.parse_args()
@@ -112,16 +112,16 @@ def dm_triangles(ref, E_ref):
         yield m, [(F @ p, F[:3, :3] @ n, uv, links) for p, n, uv, links in tri] if m else None
 
 
-# Outfits that keep their own hand (gloves, or the base hand didn't fit their sleeve) - user's in-game check
-# 2026-10-11. Everything else gets the base outfit's hand.
+# Outfits that keep their own hand (gloves, or the base hand didn't fit their sleeve) - in-game check.
+# Everything else gets the base outfit's hand.
 OWN_HANDS = {("malkavian_male", 2), ("malkavian_male", 3),
              ("malkavian_female", 1), ("malkavian_female", 2), ("malkavian_female", 3),
              ("nosferatu_male", 3),
              ("toreador_male", 1), ("toreador_male", 2), ("toreador_male", 3),
-             ("tremere_male", 2)}  # tremere_male 2: skin showed through an opening in the sleeve (10-11)
+             ("tremere_male", 2)}  # tremere_male 2: skin showed through an opening in the sleeve
 HAND_EXTEND = {("ventrue_male", 2): 0.0, ("ventrue_male", 3): 0.0}  # (character, outfit) -> units, overrides --hand-extend (ventrue_male 2-3: tight sleeves, the extension poked through; no gap without it)
 TAPER = 0.3  # the base hand's forearm extension is up to 30% thinner at its top end (inside the sleeve)
-# outfit materials left out on purpose (user, 2026-10-11): toreador_female outfit 2's feather frill bristles around
+# outfit materials left out on purpose: toreador_female outfit 2's feather frill bristles around
 # the hand in first person
 LEAVE_OUT = {("toreador_female", 2): {"TorFA2cuff"}}
 

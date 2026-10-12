@@ -568,7 +568,7 @@ static int g_armIndex[MAX_ARM_MODELS], g_numArm, g_origArmIndex, g_armSwapFailur
 
 // Every melee weapon precached at level load. A weapon first given mid-level (console, pickup, shop) used to be
 // precached late; the engine refuses late precaches, so its sounds had no client index: the client looked the
-// index up in its sound table, got a garbage name and crashed (bat, dmcombat_crash.txt 10-11) or played another
+// index up in its sound table, got a garbage name and crashed (seen with the bat) or played another
 // weapon's sound (sledgehammer "katana sounds"). The player always carries the fists (CWeaponUnarmed 0x104e7dbc,
 // item_w_unarmed; also CWeaponMelee_Fists 0x104d5ecc), precached on every level load: their Precache (slot 104 =
 // CBaseCombatWeapon::Precache 0x10250ed0) also runs UTIL_PrecacheOther (0x101d0ec0, cdecl(classname): creates the

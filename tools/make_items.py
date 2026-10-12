@@ -20,7 +20,6 @@ import weapon_prep  # noqa: E402
 UP_ITEMS = os.path.join(os.path.dirname(ROOT), "Unofficial_Patch", "vdata", "items")
 BACKUP = os.path.join(ROOT, "backup", "items_orig")
 OUT = os.path.join(ROOT, "build", "items")
-OLD_KATANA_BACKUP = os.path.join(ROOT, "backup", "2026-10-09", "item_w_katana.txt.orig")
 VIEWMODEL = "models/weapons/dm_katana/v_dm_katana_arm.mdl"
 SOUND_SWAPS = {"item_w_sledgehammer.txt": [("Weapons/Melee/Sledgehammer/Swish_2.wav", "Weapons/Melee/Baseball_Bat/Swish_1.wav"),
                                            ("Weapons/Melee/Sledgehammer/Swish_3.wav", "Weapons/Melee/Baseball_Bat/Swish_3.wav")]}
@@ -32,7 +31,7 @@ for name, (_, _, item) in weapon_prep.VTABLES.items():
     bak = os.path.join(BACKUP, fname)
     live = os.path.join(UP_ITEMS, fname)
     if not os.path.exists(bak):
-        src = OLD_KATANA_BACKUP if name == "katana" and os.path.exists(OLD_KATANA_BACKUP) else live
+        src = live
         data = open(src, "rb").read()
         if b"DMCombat" in data:
             raise SystemExit("%s is already patched and no original is backed up" % src)

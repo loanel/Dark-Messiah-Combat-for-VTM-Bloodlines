@@ -20,7 +20,7 @@ import numpy as np
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KATANA_GRIP = -13.0
 
-# name: (source smd, scale, grip from butt, roll deg, flip)   (user review 2026-10-10: knife/baton flipped,
+# name: (source smd, scale, grip from butt, roll deg, flip)   (in-game review: knife/baton flipped,
 # attacking sides turned onto the katana edge (attack_dir); tire iron grip from surface samples)
 WEAPONS = {
     "katana": ("modelsrc/ground/g_katana/g_katana_REF.smd", 1.0, None, 0, False),  # reference (unchanged)
@@ -28,9 +28,9 @@ WEAPONS = {
     # matches the katana's UVs exactly): katana geometry, materials renamed (MATERIALS)
     "occultblade": ("modelsrc/ground/g_katana/g_katana_REF.smd", 1.0, None, 0, False),
     "knife": ("modelsrc/ground/g_knife/g_knife_REF.smd", 1.0, 3.5, 0, True),
-    "tireiron": ("modelsrc/ground/g_tireiron/g_tireiron_REF.smd", 1.0, 4.0, 180, False),  # 180: bent end forward (in-game check 10-11)
+    "tireiron": ("modelsrc/ground/g_tireiron/g_tireiron_REF.smd", 1.0, 4.0, 180, False),  # 180: bent end forward (in-game check)
     "fireaxe": ("modelsrc/ground/g_fire_axe/g_fire_axe_REF.smd", 1.0, 5.0, 0, False),
-    "sledgehammer": ("modelsrc/ground/g_sledgehammer/g_sledgehammer_REF.smd", 0.9, 5.0, 0, False),  # 0.9: the thick handle swallowed the fingers (user, 10-11)
+    "sledgehammer": ("modelsrc/ground/g_sledgehammer/g_sledgehammer_REF.smd", 0.9, 5.0, 0, False),  # 0.9: the thick handle swallowed the fingers
     "torch": ("modelsrc/ground/g_torch/g_torch_REF.smd", 1.0, 5.0, 0, False),
     "baton": ("modelsrc/wield/w_m_baton/w_m_baton_REF.smd", 0.95, 3.5, 0, True),
     "bushhook": ("modelsrc/wield/w_m_bushhook/w_m_bushhook_REF.smd", 1.0, 5.0, 0, False),

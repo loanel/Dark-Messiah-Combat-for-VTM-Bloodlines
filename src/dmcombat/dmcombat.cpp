@@ -86,7 +86,7 @@ static void CheckDisciplineBind()
 	fclose(f);
 }
 
-// Builds we reverse-engineered (Unofficial Patch install, 2026-10-09).
+// Builds we reverse-engineered (Unofficial Patch v12.0).
 static const DWORD CLIENT_TIMESTAMP = 0x41afaf63, CLIENT_SIZE = 0x6e9000;
 static const DWORD SERVER_TIMESTAMP = 0x41afafae, SERVER_SIZE = 0xab9000;
 
