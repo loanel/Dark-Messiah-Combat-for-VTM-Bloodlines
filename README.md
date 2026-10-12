@@ -1,6 +1,8 @@
 # Dark Messiah Combat for VTM Bloodlines
 This is a modification for Vampire: The Masquerade - Bloodlines that replaces the default melee combat system with first person combat from Dark Messiah of Might and Magic. It was created using claude code and general knowledge contained in the universal-modder repository. It resues all existing asset models (clothing and hand textures for each of the clans) to create the first person view for all melee weapons available in the game.
+
 This mod is possible only because of the hard work by the developers of **[Unofficial Patch v12.0](https://www.moddb.com/mods/vtmb-unofficial-patch)**, that not only fixes the base game in multiple ways, but also provides an SDK which was used to create the necessary plugin.
+
 In the repository you will find:
 - scripts that convert all necessary assets and logic from both Dark Messiah and VTM: Bloodlines (with the Unofficial Patch installed); no game files are present in the repository, only the scripts that work on games installed by the user
 - various documents in the docs directory that explain how this was achieved, including all steps taken by claude code, directions on how handle problems, general description of the sessions and prompts
