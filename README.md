@@ -37,7 +37,9 @@ games, on your PC.
 Install these first:
 
 1. **Vampire: The Masquerade - Bloodlines** (Steam or GOG) with the **[Unofficial Patch v12.0](https://www.moddb.com/mods/vtmb-unofficial-patch)**. Dark Messiah Combat checks the
-   exact game builds and stays off with any other version.
+   exact game builds and stays off with any other version. In the Unofficial Patch's installer, select the
+   **Plus Patch** and the **Patch Extras**: that is the setup Dark Messiah Combat was developed and tested with (the
+   Basic patch alone is untested).
 2. **The Bloodlines SDK**, installed into the game folder (its tools end up in `<Bloodlines>\SDKBinaries`). The
    installer uses its model compiler and texture tool. The SDK is available on the
    **[Unofficial Patch's ModDB page](https://www.moddb.com/mods/vtmb-unofficial-patch)** (Downloads section).

@@ -63,6 +63,14 @@ def build_defaults():
 
 
 def bind_config(undo):
+    if not os.path.exists(CONFIG):
+        # a fresh install: the game writes config.cfg when it first quits, from the defaults patched above (Q)
+        if not undo:
+            print("config.cfg: none yet (game not started since install) - it will be created with discipline on %s"
+                  % KEY.upper())
+        elif os.path.exists(REBOUND):
+            os.remove(REBOUND)
+        return
     text = read(CONFIG)
     m2 = re.search(BIND_RE % "MOUSE2", text)
     k = re.search(BIND_RE % KEY, text)

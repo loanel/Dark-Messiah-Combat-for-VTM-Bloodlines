@@ -234,6 +234,7 @@ def install(args):
     if ini_created:
         shutil.copyfile(os.path.join(ROOT, "dist", "dmcombat.ini"), ini)
     r = subprocess.run([PY, os.path.join(ROOT, "tools", "make_keys.py"), "--bind"], cwd=ROOT)
+    keys_ok = r.returncode == 0
     os.makedirs(os.path.dirname(MANIFEST), exist_ok=True)
     json.dump({"installed": [{"path": os.path.relpath(d, GAME), "sha256": sha256(d),
                               "replaced": d in replaced} for s, d in files],
@@ -241,6 +242,9 @@ def install(args):
               open(MANIFEST, "w"), indent=1)
     print("\nDone in %d s: %d files installed (%d game files replaced, originals in backup\\)."
           % (time.time() - t0, len(files), len(replaced)))
+    if not keys_ok:
+        print("WARNING: your own key bindings (cfg\\config.cfg) could not be updated - see the message above. Set\n"
+              "         \"Cast Discipline Power\" to Q yourself in Options > Keyboard (right mouse is the block).")
     print("Start the game with the Unofficial Patch (its shortcut, or Vampire.exe -game Unofficial_Patch).")
     print("Settings: dmcombat.ini in the game folder. Uninstall: install.bat --uninstall")
 
@@ -268,7 +272,9 @@ def uninstall(args):
               os.path.join(UP, "sound", "dmcombat")):
         if os.path.isdir(d) and not os.listdir(d):
             os.rmdir(d)
-    subprocess.run([PY, os.path.join(ROOT, "tools", "make_keys.py"), "--unbind"], cwd=ROOT)
+    r = subprocess.run([PY, os.path.join(ROOT, "tools", "make_keys.py"), "--unbind"], cwd=ROOT)
+    if r.returncode:
+        print("WARNING: your key bindings could not be restored - set \"Cast Discipline Power\" in Options > Keyboard.")
     os.remove(MANIFEST)
     print("Removed %d files, restored %d original game files. dmcombat.ini and dmcombat.log stay in the game folder."
           % (removed, restored))
